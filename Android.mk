@@ -196,9 +196,19 @@ ifeq ($(shell git -C $(LOCAL_PATH) diff --quiet; echo $$?),1)
 endif
 LOCAL_CFLAGS += -DTW_GIT_REVISION='"$(tw_git_revision)"'
 
+ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 28; echo $$?),0)
+ifeq ($(TW_EXCLUDE_MTP),)
+    LOCAL_SHARED_LIBRARIES += libtwrpmtp-ffs
+endif
+else
+ifeq ($(TW_EXCLUDE_MTP),)
+    LOCAL_CFLAGS += -DTW_HAS_LEGACY_MTP
+    LOCAL_SHARED_LIBRARIES += libtwrpmtp-legacy
+endif
+endif
+
 #TWRP Build Flags
 ifeq ($(TW_EXCLUDE_MTP),)
-    LOCAL_SHARED_LIBRARIES += libtwrpmtp
     LOCAL_CFLAGS += -DTW_HAS_MTP
 endif
 ifneq ($(TW_NO_SCREEN_TIMEOUT),)
@@ -753,6 +763,12 @@ include \
     $(LOCAL_PATH)/bootloader_message/Android.mk \
     $(LOCAL_PATH)/bootloader_message_twrp/Android.mk
 
+ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 28; echo $$?),0)
+    include $(commands_recovery_local_path)/mtp/ffs/Android.mk
+else
+    include $(commands_recovery_local_path)/mtp/legacy/Android.mk
+endif
+
 ifeq ($(wildcard system/core/uncrypt/Android.mk),)
     include $(commands_recovery_local_path)/uncrypt/Android.mk
 endif
@@ -771,6 +787,7 @@ else
 endif
 
 #includes for TWRP
+<<<<<<< HEAD
 include $(commands_recovery_local_path)/injecttwrp/Android.mk \
     $(commands_recovery_local_path)/htcdumlock/Android.mk \
     $(commands_recovery_local_path)/gui/Android.mk \
@@ -788,7 +805,6 @@ include $(commands_recovery_local_path)/injecttwrp/Android.mk \
     $(commands_recovery_local_path)/openaes/Android.mk \
     $(commands_recovery_local_path)/toolbox/Android.mk \
     $(commands_recovery_local_path)/twrpTarMain/Android.mk \
-    $(commands_recovery_local_path)/mtp/Android.mk \
     $(commands_recovery_local_path)/minzip/Android.mk \
     $(commands_recovery_local_path)/dosfstools/Android.mk \
     $(commands_recovery_local_path)/etc/Android.mk \
