@@ -14,7 +14,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifdef project-path-for
+ifneq ($(project-path-for),)
     ifeq ($(LOCAL_PATH),$(call project-path-for,recovery))
         PROJECT_PATH_AGREES := true
         BOARD_SEPOLICY_DIRS += $(call project-path-for,recovery)/sepolicy
