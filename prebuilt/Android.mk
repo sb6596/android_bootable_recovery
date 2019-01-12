@@ -493,3 +493,12 @@ ifneq ($(TW_EXCLUDE_TWRPAPP),true)
 	LOCAL_SRC_FILES := $(LOCAL_MODULE)
 	include $(BUILD_PREBUILT)
 endif
+
+ifeq ($(TW_INCLUDE_REPACKTOOLS), true)
+    ifeq ($(wildcard external/magisk-prebuilt/Android.mk),)
+        $(warning Magisk repacking tools not found!)
+        $(warning Please place https://github.com/TeamWin/external_magisk-prebuilt)
+        $(warning into external/magisk-prebuilt)
+        $(error magiskboot prebuilts not present; exiting)
+    endif
+endif
