@@ -497,7 +497,9 @@ endif
 endif
 endif
 
-ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 25; echo $$?),0)
+ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 26; echo $$?),0)
+    LOCAL_ADDITIONAL_DEPENDENCIES += file_contexts_text
+else ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 25; echo $$?),0)
     LOCAL_ADDITIONAL_DEPENDENCIES += file_contexts_text
 endif
 
